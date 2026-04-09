@@ -906,6 +906,11 @@
       padding: 28px;
     }
 
+    .location-body > .btn-primary {
+      display: block;
+      margin: 0 auto 20px;
+    }
+
     #locationStatus {
       text-align: center;
       padding: 20px;
@@ -1133,8 +1138,11 @@
       nav { display: none; }
       main { padding-bottom: 90px; }
       .hero { padding: 48px 20px; }
-      .stats-bar { gap: 10px; }
-      .stat-card { min-width: 0; }
+      .stats-bar { gap: 8px; }
+      .stat-card { min-width: 0; padding: 10px; gap: 6px; }
+      .stat-icon { font-size: 1.2rem; }
+      .stat-info strong { font-size: 1rem; }
+      .stat-info span { font-size: 0.68rem; white-space: nowrap; }
       .care-grid { grid-template-columns: 1fr; }
     }
 
