@@ -849,7 +849,7 @@
       border-radius: var(--radius-sm);
       padding: 16px;
       margin-bottom: 20px;
-      display: none;
+      display: block;
     }
 
     .gemini-api-key-wrap.visible { display: block; }
