@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Plant Care Guide</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <!-- ✅ External Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <a class="logo" href="#">
+      <div class="logo-icon">🌿</div>
+      <div class="logo-text">
+        Plant Care Guide
+        <span>SDG 15 · Life on Land</span>
+      </div>
+    </a>
+    <nav>
+      <button class="nav-btn active" onclick="showPage('browse')">🌱 Browse</button>
+      <button class="nav-btn" onclick="showPage('scan')">📷 Identify</button>
+      <button class="nav-btn" onclick="showPage('location')">📍 Location</button>
+      <button class="nav-btn" onclick="showPage('about')">ℹ️ About</button>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO (only on browse) -->
+<div id="heroSection">
+  <div class="hero">
+    <div class="hero-content">
+      <h1>Discover, Learn &amp; <em>Care</em> for Plants</h1>
+      <p>Your digital companion for plant identification, care guides, and local growing recommendations — powered by Google Gemini AI.</p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="showPage('scan')">📷 Identify a Plant</button>
+        <button class="btn-secondary" onclick="showPage('location')">📍 My Location Plants</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<main>
+  <!-- ===== BROWSE PAGE ===== -->
+  <div id="page-browse" class="page active">
+    <!-- Stats -->
+    <div class="stats-bar" id="statsBar">
+      <div class="stat-card">
+        <div class="stat-icon">🌱</div>
+        <div class="stat-info"><strong id="totalCount">60</strong><span>Total Plants</span></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🌸</div>
+        <div class="stat-info"><strong id="shownCount">60</strong><span>Showing</span></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon">🌏</div>
+        <div class="stat-info"><strong>6</strong><span>Categories</span></div>
+      </div>
+    </div>
+
+    <!-- Search & Filters -->
+    <div class="search-bar">
+      <div class="search-input-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="text" class="search-input" id="searchInput" placeholder="Search plants, e.g. 'rose' or 'indoor'..." oninput="filterPlants()" />
+      </div>
+      <div class="filter-row" id="filterRow">
+        <button class="filter-chip active" onclick="setFilter('All', this)">All</button>
+        <button class="filter-chip" onclick="setFilter('Easy', this)">✅ Easy</button>
+        <button class="filter-chip" onclick="setFilter('Moderate', this)">⚠️ Moderate</button>
+        <button class="filter-chip" onclick="setFilter('Challenging', this)">🔥 Challenging</button>
+        <button class="filter-chip" onclick="setCatFilter('Flowering', this)">🌸 Flowering</button>
+        <button class="filter-chip" onclick="setCatFilter('Succulent', this)">🌵 Succulents</button>
+        <button class="filter-chip" onclick="setCatFilter('Herb', this)">🌿 Herbs</button>
+        <button class="filter-chip" onclick="setCatFilter('Fruit Tree', this)">🍎 Fruit Trees</button>
+        <button class="filter-chip" onclick="setCatFilter('Indoor', this)">🏠 Indoor</button>
+      </div>
+    </div>
+
+    <h2 class="section-title">🌿 Plant Directory</h2>
+
+    <div class="plant-grid" id="plantGrid"></div>
+    <div class="no-results" id="noResults">
+      <div style="font-size:4rem;">🔍</div>
+      <h3>No plants found</h3>
+      <p>Try a different search term or clear your filters.</p>
+
+      <div class="about-card" id="geminiGuide">
+        <h2>🔑 Paano Kumuha ng Gemini API Key</h2>
+        <p>Ang Google Gemini API ay <strong>libre</strong> gamitin para sa personal at student projects. Sundin ang mga hakbang na ito:</p>
+
+        <div class="guide-steps">
+
+          <div class="guide-step">
+            <div class="step-num">1</div>
+            <div class="step-body">
+              <div class="step-title">Pumunta sa Google AI Studio</div>
+              <div class="step-desc">I-open ang iyong browser at pumunta sa <strong>aistudio.google.com</strong> — ito ang opisyal na developer platform ng Google para sa Gemini AI.</div>
+            </div>
+          </div>
+
+          <div class="guide-step">
+            <div class="step-num">2</div>
+            <div class="step-body">
+              <div class="step-title">Mag-sign in gamit ang Google Account</div>
+              <div class="step-desc">I-click ang <strong>"Sign in"</strong> at gamitin ang iyong Gmail account. Hindi kailangan ng bagong account — ang existing Google/Gmail mo ay sapat na.</div>
+            </div>
+          </div>
+
+          <div class="guide-step">
+            <div class="step-num">3</div>
+            <div class="step-body">
+              <div class="step-title">Tanggapin ang Terms of Service</div>
+              <div class="step-desc">Sa unang pagkakataon, magpapakita ng Terms of Service. Basahin at i-click ang <strong>"I agree"</strong> o <strong>"Accept"</strong> para magpatuloy. Awtomatiko rin itong gagawa ng Google Cloud project para sa iyo.</div>
+            </div>
+          </div>
+
+          <div class="guide-step">
+            <div class="step-num">4</div>
+            <div class="step-body">
+              <div class="step-title">I-click ang "Get API Key"</div>
+              <div class="step-desc">Sa kaliwang sidebar o sa dashboard, hanapin at i-click ang <strong>"Get API key"</strong> button. Dadalhin ka nito sa API key management page.</div>
+            </div>
+          </div>
+
+          <div class="guide-step">
+            <div class="step-num">5</div>
+            <div class="step-body">
+              <div class="step-title">Gumawa ng Bagong API Key</div>
+              <div class="step-desc">I-click ang <strong>"Create API key"</strong>. Piliin ang <strong>"Create API key in new project"</strong> (inirerekomenda para sa mga baguhan). Hihintayin lang ng ilang segundo.</div>
+            </div>
+          </div>
+
+          <div class="guide-step">
+            <div class="step-num">6</div>
+            <div class="step-body">
+              <div class="step-title">Kopyahin ang API Key</div>
+              <div class="step-desc">Kapag lumabas na ang key (nagsisimula sa <strong>AIza...</strong>), i-click ang copy button. <span style="color:#c0392b;font-weight:600;">Huwag ibahagi ang key na ito sa iba!</span> I-paste ito sa Plant Identifier page ng app.</div>
+            </div>
+          </div>
+
+          <div class="guide-step">
+            <div class="step-num">7</div>
+            <div class="step-body">
+              <div class="step-title">I-paste sa App</div>
+              <div class="step-desc">Pumunta sa <strong>📷 Identify tab</strong> ng app, i-paste ang iyong API key sa input box na nagsasabing "AIza...", at handa ka na! Awtomatikong nate-save ito para hindi mo na kailangang i-paste ulit sa susunod.</div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="gemini-tip-box">
+          <div class="tip-icon">💡</div>
+          <div>
+            <strong>Tips:</strong>
+            <ul style="margin-top:6px; padding-left:18px; font-size:0.85rem; color:var(--text-mid); line-height:1.8;">
+              <li>Ang free tier ng Gemini API ay may <strong>daily quota</strong> — sapat para sa personal/student use.</li>
+              <li>Gamitin ang <strong>Gemini 1.5 Flash</strong> model — ito ang pinakamabilis at libre.</li>
+              <li>Huwag i-commit ang API key sa GitHub o ibahagi sa public.</li>
+              <li>Kung may error, subukan na i-refresh ang page at i-paste ulit ang key.</li>
+              <li>Ang key ay naka-save sa browser — hindi ito nawawala kahit i-refresh ang page.</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== SCAN / IDENTIFY PAGE ===== -->
+  <div id="page-scan" class="page">
+    <div class="cam-container">
+      <div class="cam-top">
+        <h2>📷 Plant Identifier</h2>
+        <p>Take a photo or upload an image — Gemini AI will identify it instantly</p>
+      </div>
+      <div class="cam-body">
+
+        <!-- API Key Input Box -->
+        <div class="gemini-api-key-wrap" id="apiKeyWrap">
+          <p>🔑 Enter your <strong>Google Gemini API Key</strong> to enable AI identification:</p>
+          <div style="display:flex;gap:8px;align-items:center;margin-top:6px;">
+            <input type="password" id="geminiApiKey" placeholder="Paste your key here: AIzaSy..." style="flex:1;padding:10px 14px;border-radius:50px;border:1px solid #ffd966;font-size:0.88rem;" />
+            <button onclick="saveApiKey()" style="background:var(--green-mid);color:#fff;border:none;padding:10px 18px;border-radius:50px;font-weight:700;cursor:pointer;white-space:nowrap;">💾 Save</button>
+          </div>
+          <p style="margin-top:6px;font-size:0.76rem;color:#856404;">
+            Get a FREE key → <strong>aistudio.google.com/apikey</strong> &nbsp;|&nbsp; Guide is in the <strong>ℹ️ About</strong> tab
+          </p>
+        </div>
+
+        <!-- Camera / Image Preview -->
+        <div class="cam-preview" id="camPreview">
+          <video id="liveVideo" autoplay playsinline muted style="display:none;width:100%;height:100%;object-fit:cover;border-radius:8px;"></video>
+          <img id="capturedImg" alt="Captured plant" style="display:none;width:100%;height:100%;object-fit:cover;border-radius:8px;" />
+          <canvas id="snapCanvas" style="display:none;"></canvas>
+          <div class="cam-placeholder" id="camPlaceholder">
+            <span class="cam-placeholder-icon">🌿</span>
+            <p>Camera preview / uploaded image will appear here</p>
+          </div>
+        </div>
+
+        <!-- Action Buttons Row -->
+        <div class="cam-actions">
+          <button class="cam-btn cam-btn-main" id="cameraBtn" onclick="toggleCamera()">📷 Open Camera</button>
+          <button class="cam-btn cam-btn-upload" onclick="document.getElementById('fileInput').click()">📁 Upload Image</button>
+          <input type="file" id="fileInput" accept="image/*" onchange="handleFileUpload(event)" style="display:none;" />
+        </div>
+
+        <!-- Snap Button — only shown when camera is active -->
+        <div style="display:flex;justify-content:center;margin-bottom:16px;">
+          <button class="cam-btn cam-btn-gold" id="snapBtn" onclick="snapPhoto()" style="display:none;min-width:200px;justify-content:center;">📸 Snap &amp; Identify</button>
+        </div>
+
+        <!-- Loading Spinner -->
+        <div class="gemini-loading" id="geminiLoading">
+          <div class="loading-spinner"></div>
+          <p>Gemini AI is analyzing your plant…</p>
+        </div>
+
+        <!-- Identification Result -->
+        <div class="gemini-result" id="geminiResult">
+          <div class="gemini-result-header">
+            <div class="gemini-found-emoji" id="resultEmoji">🌿</div>
+            <div>
+              <div class="gemini-result-title" id="resultName"></div>
+              <div class="gemini-result-scientific" id="resultScientific"></div>
+              <div style="margin-top:5px;"><span class="gemini-badge">✨ Powered by Gemini AI</span></div>
+            </div>
+          </div>
+          <div class="gemini-result-body" id="resultBody"></div>
+          <div class="db-match-banner" id="dbMatchBanner">
+            <h4>📚 Found in our Plant Directory!</h4>
+            <p id="dbMatchDesc"></p>
+            <button class="view-details-btn" id="dbMatchBtn">View Full Care Guide →</button>
+          </div>
+        </div>
+
+        <!-- Not Found / Error -->
+        <div class="gemini-not-found" id="geminiNotFound">
+          <h3>🔍 Could Not Identify</h3>
+          <p id="notFoundMsg">Please try a clearer, closer photo with good lighting.</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== LOCATION PAGE ===== -->
+  <div id="page-location" class="page">
+    <div class="location-container">
+      <div class="location-card">
+        <div class="location-header">
+          <h2>📍 Plant Recommendations for Your Location</h2>
+          <p>Get plant suggestions best suited to your local climate and region</p>
+        </div>
+        <div class="location-body">
+          <button class="btn-primary" style="margin-bottom:20px;" onclick="getLocation()">📍 Detect My Location</button>
+          <div id="locationStatus">Click the button above to detect your location.</div>
+
+          <div class="location-info" id="locationInfo">
+            <div class="location-info-row">
+              <span class="location-info-label">📍 Coordinates</span>
+              <span class="location-info-value" id="locCoords">—</span>
+            </div>
+            <div class="location-info-row">
+              <span class="location-info-label">🌍 Region</span>
+              <span class="location-info-value" id="locRegion">—</span>
+            </div>
+            <div class="location-info-row">
+              <span class="location-info-label">🌡️ Climate Zone</span>
+              <span class="location-info-value" id="locClimate">—</span>
+            </div>
+          </div>
+
+          <div class="suggested-plants" id="suggestedSection" style="display:none;">
+            <h3>🌱 Recommended Plants for Your Climate</h3>
+            <div class="suggested-list" id="suggestedList"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== ABOUT PAGE ===== -->
+  <div id="page-about" class="page">
+    <div class="about-container">
+      <div class="about-card">
+        <h2>🌿 About Plant Care Guide</h2>
+        <p>Plant Care Guide is a web and mobile application designed to promote environmental awareness and support sustainable plant care practices. It addresses the growing lack of accessible information about plants and trees.</p>
+        <p>The application provides detailed care guides for 60 plant species, AI-powered plant identification using Google Gemini, GPS-based plant recommendations, and an intuitive mobile-friendly interface.</p>
+        <div class="sdg-badge">
+          <div class="sdg-badge-icon">🌍</div>
+          <div class="sdg-badge-text">
+            <strong>SDG 15: Life on Land</strong>
+            <span>Protecting terrestrial ecosystems through digital education</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="about-card">
+        <h2>🚀 Emerging Technologies</h2>
+        <p><strong>🤖 AI (Google Gemini):</strong> Used for instant plant identification from photos. Simply take a picture and Gemini Vision identifies the plant and provides care information.</p>
+        <p><strong>☁️ Cloud Computing:</strong> Plant data is delivered via a lightweight JSON database. Structured for easy updates and scalability to a full cloud backend.</p>
+        <p><strong>📡 IoT (Mobile Sensors):</strong> Uses the device camera as an IoT sensor to capture plant images for AI analysis in real time.</p>
+        <p><strong>🗺️ Geographic Technology:</strong> Uses the browser's Geolocation API (GPS) to detect the user's location and recommend plants suited to their climate zone.</p>
+      </div>
+
+      <div class="about-card">
+        <h2>👥 Project Team</h2>
+        <p><strong>Team Name:</strong> Plant Care Guide | <strong>Program:</strong> BSIT-2D</p>
+        <div class="team-grid">
+          <div class="team-member">
+            <div class="team-avatar">👑</div>
+            <div class="team-name">Bartolazo, Barry Welch C.</div>
+            <div style="font-size:0.72rem; color:var(--text-light)">Team Leader</div>
+          </div>
+        </div>
+        <p style="margin-top:16px; font-size:0.82rem; color:var(--text-light);">Application Development and Emerging Technologies · 2nd Semester, A.Y. 2025–2026</p>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- MOBILE BOTTOM NAV -->
+<div class="mobile-nav">
+  <div class="mobile-nav-inner">
+    <button class="mobile-nav-btn active" onclick="showPage('browse')"><span class="nav-icon">🌱</span>Browse</button>
+    <button class="mobile-nav-btn" onclick="showPage('scan')"><span class="nav-icon">📷</span>Identify</button>
+    <button class="mobile-nav-btn" onclick="showPage('location')"><span class="nav-icon">📍</span>Location</button>
+    <button class="mobile-nav-btn" onclick="showPage('about')"><span class="nav-icon">ℹ️</span>About</button>
+  </div>
+</div>
+
+<!-- PLANT DETAIL MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="modalContent">
+    <div class="modal-header" id="modalEmoji">🌿</div>
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-body">
+      <div class="modal-name" id="modalName"></div>
+      <div class="modal-scientific" id="modalScientific"></div>
+      <div class="modal-badges" id="modalBadges"></div>
+      <div class="modal-desc" id="modalDesc"></div>
+      <div class="care-grid" id="modalCareGrid"></div>
+      <div>
+        <div style="font-size:0.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--text-light); margin-bottom:8px;">Tags</div>
+        <div class="modal-tags" id="modalTags"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script src="app.js"></script>
+</body>
+</html>
