@@ -16,7 +16,7 @@
 // OPTIONAL: Hard-code your key here so you never have to type it
 // Leave empty '' to use the input box in the app instead
 // ─────────────────────────────────────────────────────────
-const HARDCODED_KEY = 'AIzaSyDVyuECNEEDuw6xV7HL2ALu-H_0c1Ztev8';
+const HARDCODED_KEY = '';
 
 // ─────────────────────────────────────────────────────────
 // GEMINI MODEL — gemini-2.5-flash is the current free model (2026)
